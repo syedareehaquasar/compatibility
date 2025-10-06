@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Compatibility Data</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> 
     <style>
-        /* Admin specific styles (kept for consistent look) */
+        /* General styles expected from style.css (included for necessary elements) */
+        .hidden { display: none; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input[type="text"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; 
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ff6f61; /* Using a friendly color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Admin specific styles */
         .admin-container {
             padding: 40px;
             background: white;
@@ -16,7 +37,14 @@
             margin: 40px auto;
         }
         h2 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
-        .login-box { text-align: center; max-width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .login-box { 
+            text-align: center; 
+            max-width: 300px; 
+            margin: 50px auto; 
+            padding: 20px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+        }
         .data-instructions {
             padding: 20px;
             background-color: #fff8e1; /* Light yellow background for notice */
@@ -30,6 +58,17 @@
         .warning {
             color: red;
             font-weight: bold;
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
         }
     </style>
 </head>
@@ -55,18 +94,18 @@
         </div>
 
         <div id="data-view" class="admin-container hidden">
-    <h2>Collected Data Log</h2>
-    <div class="data-instructions">
-        <p>
-            The compatibility data for all users is being automatically logged in real-time to the dedicated Google Sheet.
-        </p>
-        <h3>Access the Data:</h3>
-        <p>Click the link below to view the sheet. Refresh the sheet to see the latest entries.</p>
-        <a class="download-link" href="https://docs.google.com/spreadsheets/d/1jhol_B3ElWYvL-vDY3wjhBA-8HijDyQcpEDlwzlqxVI/edit?gid=0#gid=0" target="_blank" style="background-color: #4285F4;">
-            View Live Compatibility Log Sheet
-        </a>
-    </div>
-</div>
+            <h2>Collected Data Log</h2>
+            <div class="data-instructions">
+                <p>
+                    The compatibility data for all users is being automatically logged in real-time to the dedicated Google Sheet.
+                </p>
+                <h3>Access the Data:</h3>
+                <p>Click the link below to view the sheet. Refresh the sheet to see the latest entries.</p>
+                <a class="download-link" href="https://docs.google.com/spreadsheets/d/1jhol_B3ElWYvL-vDY3wjhBA-8HijDyQcpEDlwzlqxVI/edit?gid=0#gid=0" target="_blank" style="background-color: #4285F4;">
+                    View Live Compatibility Log Sheet
+                </a>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -85,10 +124,12 @@
             const ADMIN_PASS = 'love2025'; 
 
             if (username === ADMIN_USER && password === ADMIN_PASS) {
+                // Successful login
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('data-view').classList.remove('hidden');
                 loginMessage.style.display = 'none';
             } else {
+                // Failed login
                 loginMessage.style.display = 'block';
             }
         }
