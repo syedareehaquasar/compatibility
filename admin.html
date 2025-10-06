@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | MatchMaker Data</title>
+    <title>Admin Dashboard | Compatibility Data</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Admin specific styles */
+        /* Admin specific styles (kept for consistent look) */
         .admin-container {
             padding: 40px;
             background: white;
@@ -16,16 +16,27 @@
             margin: 40px auto;
         }
         h2 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f2f2f2; color: #555; }
         .login-box { text-align: center; max-width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .data-instructions {
+            padding: 20px;
+            background-color: #fff8e1; /* Light yellow background for notice */
+            border: 1px solid #ffeb3b;
+            border-radius: 5px;
+        }
+        .data-instructions ol li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>MatchMaker Admin Dashboard</h1>
-        <p>Viewing Collected User Data</p>
+        <p>Viewing Collected Compatibility Data</p>
     </header>
 
     <main>
@@ -44,40 +55,30 @@
         </div>
 
         <div id="data-view" class="admin-container hidden">
-            <h2>Collected Data</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name/Alias</th>
-                        <th>Age</th>
-                        <th>Main Interest</th>
-                        <th>Ideal Match Description</th>
-                        <th>Email (Hash)</th>
-                    </tr>
-                </thead>
-                <tbody id="data-table-body">
-                    <tr>
-                        <td>CyberLover</td>
-                        <td>28</td>
-                        <td>Tech/Programming</td>
-                        <td>Someone who loves late-night coding sessions and mountain hiking.</td>
-                        <td>a3b4c5d6...</td>
-                    </tr>
-                    <tr>
-                        <td>ArtFanatic</td>
-                        <td>35</td>
-                        <td>Art/Design</td>
-                        <td>A passionate soulmate who appreciates museums and quiet evenings.</td>
-                        <td>f7g8h9i0...</td>
-                    </tr>
-                    </tbody>
-            </table>
-            <p style="margin-top: 20px; font-style: italic;">Note: Emails are partially masked for security simulation.</p>
+            <h2>Data Collection Status</h2>
+            <div class="data-instructions">
+                <p class="warning">
+                    ⚠️ **IMPORTANT: Data is not stored on the server.** Due to the limitation of a backend-less GitHub Pages site, 
+                    the user data is collected manually.
+                </p>
+                <h3>How to Collect Data Log:</h3>
+                <ol>
+                    <li>Instruct the person testing the compatibility to click the **"Download Data Log"** link after getting their result.</li>
+                    <li>The user's browser will download a file named `compatibility_log.csv`.</li>
+                    <li>The log file will contain the names, result, and a timestamp for that single test.</li>
+                    <li>To see **all** data, you need to collect and merge the `compatibility_log.csv` files sent to you by all the users.</li>
+                </ol>
+                <p>
+                    **Example Log Content:**<br>
+                    `Timestamp,Name_A,Name_B,Compatibility_Result`<br>
+                    `2025-10-06T13:00:00Z,"John Doe","Jane Smith",Lovers`
+                </p>
+            </div>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2025 MatchMaker Inc. | <a href="index.html">Back to Home</a></p>
+        <p>&copy; 2025 MatchMaker Inc. | <a href="index.html">Back to Test</a></p>
     </footer>
 
     <script>
