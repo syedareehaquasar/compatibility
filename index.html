@@ -71,78 +71,89 @@
     </footer>
 
     <script>
-        // Compatibility Test Logic (Simulated FLAMES)
-        function calculateCompatibility(name1, name2) {
-            const F = "Friends";
-            const L = "Lovers";
-            const A = "Affectionate";
-            const M = "Marriage";
-            const E = "Enemies";
-            const S = "Siblings";
-            const FLAMES = [F, L, A, M, E, S];
-            const FLAMES_short = ['F', 'L', 'A', 'M', 'E', 'S'];
+    // ⚠️ IMPORTANT: PASTE YOUR DEPLOYED WEB APP URL HERE ⚠️
+    const GOOGLE_SHEET_WEB_APP_URL = 'PASTE_YOUR_DEPLOYED_APPS_SCRIPT_URL_HERE'; 
 
-            // Simple logic: total length of names
-            const length = (name1.toLowerCase().replace(/[^a-z]/g, '').length + name2.toLowerCase().replace(/[^a-z]/g, '').length);
-            
-            // Use modulo operator to map the length to one of the 6 results
-            const index = length % 6; 
-            
-            return {
-                result: FLAMES[index],
-                short: FLAMES_short[index]
-            };
-        }
+    // Compatibility Test Logic (Simulated FLAMES)
+    function calculateCompatibility(name1, name2) {
+        // ... (Keep the previous FLAMES logic)
+        const F = "Friends";
+        const L = "Lovers";
+        const A = "Affectionate";
+        const M = "Marriage";
+        const E = "Enemies";
+        const S = "Siblings";
+        const FLAMES = [F, L, A, M, E, S];
+        const FLAMES_short = ['F', 'L', 'A', 'M', 'E', 'S'];
 
-        document.getElementById('flamesForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const nameA = document.getElementById('nameA').value.trim();
-            const nameB = document.getElementById('nameB').value.trim();
-            
-            if (!nameA || !nameB) return;
+        const nameA_clean = name1.toLowerCase().replace(/[^a-z]/g, '');
+        const nameB_clean = name2.toLowerCase().replace(/[^a-z]/g, '');
 
-            // 1. Calculate Result
-            const { result, short } = calculateCompatibility(nameA, nameB);
-
-            // 2. Display Result
-            const resultBox = document.getElementById('compatibilityResult');
-            resultBox.innerHTML = `Compatibility: **${result}** (${short})`;
-            resultBox.className = `result-box ${short}`;
-            document.getElementById('result').classList.remove('hidden');
-
-            // 3. Log Data and Enable Download Link
-            logAndDownloadData(nameA, nameB, result);
-        });
+        // Simple logic: total length of unique characters
+        let combined = nameA_clean + nameB_clean;
+        let unique = Array.from(new Set(combined.split(''))).join('');
+        const length = unique.length;
         
-        function logAndDownloadData(nameA, nameB, result) {
-            // Generate a unique timestamp for the log
-            const timestamp = new Date().toISOString();
-            
-            // Create a CSV-style log entry
-            // Headers: Timestamp, Name A, Name B, Result
-            const logEntry = `${timestamp},"${nameA}","${nameB}",${result}\n`;
+        // Use modulo operator to map the length to one of the 6 results
+        const index = length % 6; 
+        
+        return {
+            result: FLAMES[index],
+            short: FLAMES_short[index]
+        };
+    }
 
-            // NOTE: For a persistent log, you would use a backend to append this.
-            // Since we don't have a backend, we create a temporary file for download.
+    document.getElementById('flamesForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const nameA = document.getElementById('nameA').value.trim();
+        const nameB = document.getElementById('nameB').value.trim();
+        
+        if (!nameA || !nameB) return;
 
-            // The 'admin' will use this file to view all collected data.
-            const header = "Timestamp,Name_A,Name_B,Compatibility_Result\n";
-            const fileContent = header + logEntry;
+        // 1. Calculate Result
+        const { result, short } = calculateCompatibility(nameA, nameB);
 
-            // Create a Blob (Binary Large Object)
-            const blob = new Blob([fileContent], { type: 'text/csv;charset=utf-8;' });
-            
-            // Create a temporary URL for the download link
-            const url = URL.createObjectURL(blob);
-            
-            const downloadLink = document.getElementById('downloadData');
-            downloadLink.href = url;
-        }
+        // 2. Display Result
+        const resultBox = document.getElementById('compatibilityResult');
+        resultBox.innerHTML = `Compatibility: **${result}** (${short})`;
+        resultBox.className = `result-box ${short}`;
+        document.getElementById('result').classList.remove('hidden');
 
-        // Hide the form on success and show result (optional for compatibility tests)
-        // document.getElementById('flamesForm').classList.add('hidden'); // Keeping the form visible to run multiple tests
+        // 3. Log Data to Google Sheet
+        logDataToSheet(nameA, nameB, result);
+    });
+    
+    // Function to send data to the Google Apps Script endpoint
+    function logDataToSheet(nameA, nameB, result) {
+        const data = {
+            nameA: nameA,
+            nameB: nameB,
+            result: result
+        };
 
-    </script>
+        // Use URLSearchParams to format data for the Apps Script (key=value&key2=value2)
+        const formData = new URLSearchParams(data).toString();
+
+        fetch(GOOGLE_SHEET_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Required for Google Apps Script endpoint
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData 
+        })
+        .then(response => {
+            // Note: Due to 'no-cors', we can't read the response body reliably, 
+            // but the request is sent successfully.
+            console.log('Data logged to Google Sheet.');
+        })
+        .catch(error => {
+            console.error('Error logging data:', error);
+            alert('Failed to log data. Check console for details.');
+        });
+    }
+</script>
 </body>
 </html>
