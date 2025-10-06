@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MatchMaker Data</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Admin specific styles */
+        .admin-container {
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        h2 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; color: #555; }
+        .login-box { text-align: center; max-width: 300px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MatchMaker Admin Dashboard</h1>
+        <p>Viewing Collected User Data</p>
+    </header>
+
+    <main>
+        <div id="login-form" class="login-box">
+            <h2>Admin Login</h2>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="admin">
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="love2025">
+            </div>
+            <button onclick="checkLogin()">Login</button>
+            <p id="login-message" style="color: red; margin-top: 10px; display: none;">Invalid credentials.</p>
+        </div>
+
+        <div id="data-view" class="admin-container hidden">
+            <h2>Collected Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name/Alias</th>
+                        <th>Age</th>
+                        <th>Main Interest</th>
+                        <th>Ideal Match Description</th>
+                        <th>Email (Hash)</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table-body">
+                    <tr>
+                        <td>CyberLover</td>
+                        <td>28</td>
+                        <td>Tech/Programming</td>
+                        <td>Someone who loves late-night coding sessions and mountain hiking.</td>
+                        <td>a3b4c5d6...</td>
+                    </tr>
+                    <tr>
+                        <td>ArtFanatic</td>
+                        <td>35</td>
+                        <td>Art/Design</td>
+                        <td>A passionate soulmate who appreciates museums and quiet evenings.</td>
+                        <td>f7g8h9i0...</td>
+                    </tr>
+                    </tbody>
+            </table>
+            <p style="margin-top: 20px; font-style: italic;">Note: Emails are partially masked for security simulation.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 MatchMaker Inc. | <a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+        // Simple Frontend-only Login Check
+        function checkLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginMessage = document.getElementById('login-message');
+
+            // Hardcoded Credentials
+            const ADMIN_USER = 'admin';
+            const ADMIN_PASS = 'love2025'; 
+
+            if (username === ADMIN_USER && password === ADMIN_PASS) {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('data-view').classList.remove('hidden');
+                loginMessage.style.display = 'none';
+            } else {
+                loginMessage.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
