@@ -3,54 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Your Perfect Link | MatchMaker</title>
+    <title>FLAMES Compatibility Test | MatchMaker</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add specific styles for the result */
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .result-box.F { background-color: #ffcccc; color: #cc0000; } /* Friends */
+        .result-box.L { background-color: #ffe6cc; color: #ff6600; } /* Lovers */
+        .result-box.A { background-color: #ccffcc; color: #009900; } /* Affectionate */
+        .result-box.M { background-color: #cce6ff; color: #0066cc; } /* Marriage */
+        .result-box.E { background-color: #ffffcc; color: #cc9900; } /* Enemies */
+        .result-box.S { background-color: #e6ccff; color: #9900cc; } /* Siblings */
+        .download-link {
+            display: block;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>MatchMaker</h1>
-        <p>Your perfect connection is just one click away.</p>
+        <h1>FLAMES Compatibility Test</h1>
+        <p>Enter two names to reveal your destiny!</p>
     </header>
 
     <main>
         <div class="form-container">
-            <h2>Find Your Match</h2>
-            <form id="matchForm">
+            <h2>Test Your Link</h2>
+            <form id="flamesForm">
                 <div class="input-group">
-                    <label for="name">Your Name/Alias:</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="nameA">Name (Person A):</label>
+                    <input type="text" id="nameA" name="nameA" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="email">Email (For Match Notification):</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="nameB">Name (Person B):</label>
+                    <input type="text" id="nameB" name="nameB" required>
                 </div>
 
-                <div class="input-group">
-                    <label for="age">Your Age:</label>
-                    <input type="number" id="age" name="age" min="18" max="99" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="interest">Your Main Interest:</label>
-                    <select id="interest" name="interest" required>
-                        <option value="">-- Select One --</option>
-                        <option value="tech">Tech/Programming</option>
-                        <option value="art">Art/Design</option>
-                        <option value="travel">Travel/Adventure</option>
-                        <option value="fitness">Fitness/Sports</option>
-                        <option value="food">Cooking/Foodie</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="ideal-match">Describe Your Ideal Match (short sentence):</label>
-                    <textarea id="ideal-match" name="ideal-match" rows="3" required></textarea>
-                </div>
-
-                <button type="submit">Find My Link</button>
+                <button type="submit">Reveal Compatibility</button>
             </form>
-            <p id="message" class="hidden">Thank you! We'll notify you when your perfect match is found.</p>
+            
+            <div id="result" class="hidden">
+                <div id="compatibilityResult" class="result-box"></div>
+                <p>
+                    <a id="downloadData" class="download-link" href="#" download="compatibility_log.csv">Download Data Log</a>
+                    <span style="font-size: 0.8em; display: block; margin-top: 5px;">(This is how we collect the data without a backend.)</span>
+                </p>
+            </div>
         </div>
     </main>
 
@@ -59,21 +71,78 @@
     </footer>
 
     <script>
-        document.getElementById('matchForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Stop the form from submitting normally
-            
-            // NOTE: In a real application, you would send this data to a backend server.
-            // For this static GitHub page simulation, we'll just show a success message.
-            
-            // Collect form data (for potential later use if a backend is added)
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
-            console.log('Data collected:', data);
+        // Compatibility Test Logic (Simulated FLAMES)
+        function calculateCompatibility(name1, name2) {
+            const F = "Friends";
+            const L = "Lovers";
+            const A = "Affectionate";
+            const M = "Marriage";
+            const E = "Enemies";
+            const S = "Siblings";
+            const FLAMES = [F, L, A, M, E, S];
+            const FLAMES_short = ['F', 'L', 'A', 'M', 'E', 'S'];
 
-            // Simple Success Message
-            document.getElementById('matchForm').classList.add('hidden');
-            document.getElementById('message').classList.remove('hidden');
+            // Simple logic: total length of names
+            const length = (name1.toLowerCase().replace(/[^a-z]/g, '').length + name2.toLowerCase().replace(/[^a-z]/g, '').length);
+            
+            // Use modulo operator to map the length to one of the 6 results
+            const index = length % 6; 
+            
+            return {
+                result: FLAMES[index],
+                short: FLAMES_short[index]
+            };
+        }
+
+        document.getElementById('flamesForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const nameA = document.getElementById('nameA').value.trim();
+            const nameB = document.getElementById('nameB').value.trim();
+            
+            if (!nameA || !nameB) return;
+
+            // 1. Calculate Result
+            const { result, short } = calculateCompatibility(nameA, nameB);
+
+            // 2. Display Result
+            const resultBox = document.getElementById('compatibilityResult');
+            resultBox.innerHTML = `Compatibility: **${result}** (${short})`;
+            resultBox.className = `result-box ${short}`;
+            document.getElementById('result').classList.remove('hidden');
+
+            // 3. Log Data and Enable Download Link
+            logAndDownloadData(nameA, nameB, result);
         });
+        
+        function logAndDownloadData(nameA, nameB, result) {
+            // Generate a unique timestamp for the log
+            const timestamp = new Date().toISOString();
+            
+            // Create a CSV-style log entry
+            // Headers: Timestamp, Name A, Name B, Result
+            const logEntry = `${timestamp},"${nameA}","${nameB}",${result}\n`;
+
+            // NOTE: For a persistent log, you would use a backend to append this.
+            // Since we don't have a backend, we create a temporary file for download.
+
+            // The 'admin' will use this file to view all collected data.
+            const header = "Timestamp,Name_A,Name_B,Compatibility_Result\n";
+            const fileContent = header + logEntry;
+
+            // Create a Blob (Binary Large Object)
+            const blob = new Blob([fileContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // Create a temporary URL for the download link
+            const url = URL.createObjectURL(blob);
+            
+            const downloadLink = document.getElementById('downloadData');
+            downloadLink.href = url;
+        }
+
+        // Hide the form on success and show result (optional for compatibility tests)
+        // document.getElementById('flamesForm').classList.add('hidden'); // Keeping the form visible to run multiple tests
+
     </script>
 </body>
 </html>
